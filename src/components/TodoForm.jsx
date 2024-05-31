@@ -1,36 +1,45 @@
-import React,{useState, useEffect} from 'react'
-import {database} from '../appwrite/appwriteConfig'
-import {v4 as uuid} from 'uuid'
-import conf from '../appwrite/conf'
+import React, { useState, useEffect } from "react";
+import { database } from "../appwrite/appwriteConfig";
+import { v4 as uuid } from "uuid";
+import conf from "../appwrite/conf";
 
 /// 6656ff9500213bf20b80
 
 function TodoForm() {
   const [todo, setTodo] = useState("");
-  
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState({
+    msg: "",
+    isTrue: false,
+  });
 
-  const handleSubmit = (e) =>{
+  function updateError(message) {
+    setError((prev) => ({ ...error, msg: message, isTrue: true }));
+  }
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     const reloader = () => window.location.reload();
 
-   const promise =  database.createDocument(
-    conf.appwritedatabaseid,
-    conf.appwritecollectionid,
-    uuid(),
-    {todo});
+    const promise = database.createDocument(
+      conf.appwritedatabaseid,
+      conf.appwritecollectionid,
+      uuid(),
+      { todo }
+    );
 
     promise.then(
-      function(res) {
+      function (res) {
         console.log(res);
-       reloader();
+        reloader();
       },
 
-      function(error){
+      function (error) {
         console.log(error);
       }
-    )
-    
-  }
+    );
+  };
 
   return (
     <div className="max-w-7xl mx-auto mt-10">
@@ -45,8 +54,8 @@ function TodoForm() {
           id=""
           placeholder="Enter Todo"
           className="border p-2 w-2/3 rounded-md"
-          onChange={(e)=>{
-            setTodo(e.target.value)
+          onChange={(e) => {
+            setTodo(e.target.value);
           }}
         />
         <button
@@ -57,7 +66,7 @@ function TodoForm() {
         </button>
       </form>
     </div>
-  )
+  );
 }
 
-export default TodoForm
+export default TodoForm;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { database } from "../appwrite/appwriteConfig";
 import { v4 as uuid } from "uuid";
 import conf from "../appwrite/conf";
-
+import { Todos, Spinner, Error, Success } from "./index";
 /// 6656ff9500213bf20b80
 
 function TodoForm() {
@@ -65,6 +65,10 @@ function TodoForm() {
           Add Todo
         </button>
       </form>
+
+      <>
+        <Todos />
+      </>
     </div>
   );
 }

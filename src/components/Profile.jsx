@@ -56,8 +56,8 @@ function Profile() {
 
           {/* TODO FORM */}
           <TodoForm />
-          {/* TODOS BOX */}
-          <Todos />
+          
+          {/* <Todos /> */}
         </>
       ) : (
         // <Spinner />

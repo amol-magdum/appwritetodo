@@ -83,7 +83,7 @@ function Todos() {
                           className="text-red-400 cursor-pointer"
                           onClick={() => deleteTodo(item.$id)}
                         >
-                          Delete
+                          ❌
                         </span>
                       </div>
                     </div>

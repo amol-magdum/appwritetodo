@@ -1,32 +1,46 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { account } from "../appwrite/appwriteConfig";
-import Spinner from "./Spinner";
-import Error from "./Error";
+import { Spinner, Error, checkEmail, checkPassword } from "./index";
 
 function Login() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState({
+    msg: "",
+    isTrue: false,
+  });
+
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
 
+  function updateError(message) {
+    setError((prev) => ({ ...error, msg: message, isTrue: true }));
+  }
+
   const loginUser = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const x = await account.createEmailPasswordSession(
-        user.email,
-        user.password
-      );
-      navigate("/profile");
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
+
+    if (!checkEmail(user.email)) {
+      updateError("Enter valid email.");
+    } else if (user.password < 7) {
+      updateError("Enter valid password.");
+    } else {
+      setLoading(true);
+      try {
+        const x = await account.createEmailPasswordSession(
+          user.email,
+          user.password
+        );
+        navigate("/profile");
+      } catch (error) {
+        console.log("---Login user ()---", error);
+        updateError(error.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
   return (
@@ -34,7 +48,7 @@ function Login() {
       <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="text-center font-bold text-2xl">Log in</div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          {error ? <Error message={error} /> : <></>}
+          {error.isTrue ? <Error message={error.msg} /> : <></>}
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" action="#" method="POST">
               <div>
@@ -53,6 +67,7 @@ function Login() {
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     disabled={loading}
+                    placeholder="abc@xyz.com"
                     onChange={(e) => {
                       setUser({
                         ...user,
@@ -78,6 +93,7 @@ function Login() {
                     autoComplete="current-password"
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Abcd@123"
                     disabled={loading}
                     onChange={(e) => {
                       setUser({

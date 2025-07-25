@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { account } from "../appwrite/appwriteConfig";
-import { Spinner, Error, checkEmail, checkPassword } from "./index";
+import { Spinner, Error, checkEmail } from "./index";
+import { AuthContext } from "./AuthContext";
 
 function Login() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const { login, loading } = useContext(AuthContext);
   const [error, setError] = useState({
     msg: "",
     isTrue: false,
   });
-
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -22,24 +21,16 @@ function Login() {
 
   const loginUser = async (e) => {
     e.preventDefault();
-
     if (!checkEmail(user.email)) {
       updateError("Enter valid email.");
-    } else if (user.password < 7) {
+    } else if (user.password.length < 7) {
       updateError("Enter valid password.");
     } else {
-      setLoading(true);
       try {
-        const x = await account.createEmailPasswordSession(
-          user.email,
-          user.password
-        );
+        await login(user.email, user.password);
         navigate("/profile");
       } catch (error) {
-        console.log("---Login user ()---", error);
         updateError(error.message);
-      } finally {
-        setLoading(false);
       }
     }
   };

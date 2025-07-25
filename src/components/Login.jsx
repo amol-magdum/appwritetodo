@@ -34,6 +34,11 @@ function Login() {
       }
     }
   };
+
+  if (loading) {
+    return <div className="flex justify-center items-center h-screen"><Spinner /></div>;
+  }
+
   return (
     <>
       <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">

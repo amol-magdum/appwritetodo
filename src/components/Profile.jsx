@@ -42,7 +42,7 @@ function Profile() {
         <>
           <div className="min-h-min max-w-7xl mx-auto shadow-md flex justify-between text-right py-3 px-3 mt-2 rounded-md">
             <div>
-              <p className="text-xl">Hello {userDetails.name}</p>
+              <p className="text-xl">Welcome {userDetails.name}</p>
             </div>
             <div>
               <button

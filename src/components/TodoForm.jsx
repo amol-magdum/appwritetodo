@@ -52,7 +52,8 @@ function TodoForm() {
           type="text"
           name=""
           id=""
-          placeholder="Enter Todo"
+          required
+          placeholder="Enter task"
           className="border p-2 w-2/3 rounded-md"
           onChange={(e) => {
             setTodo(e.target.value);
@@ -62,7 +63,7 @@ function TodoForm() {
           className="bg-purple-500 p-2 text-white ml-2 rounded-md"
           type="submit"
         >
-          Add Todo
+          Add
         </button>
       </form>
     </div>
